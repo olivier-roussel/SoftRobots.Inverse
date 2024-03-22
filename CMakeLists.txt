@@ -146,19 +146,10 @@ else()
     add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${DOC_FILES} ${EXAMPLE_FILES} "${SRC_DIR}/component/config.h.in")
 endif()
 
-find_package(qpOASES)
-if(qpOASES_FOUND)
-  include_directories(${qpOASES_INCLUDE_DIRS})
-  target_link_libraries(${PROJECT_NAME} ${qpOASES_LIBRARIES})
-else()
-  message("External package qpOASES not found, using embedded version...")
-  set(OASES_LIBRARY_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/extlibs/qpOASES-3.2.0/")
-  add_subdirectory(${OASES_LIBRARY_DIRECTORY} extlibs/libqpOASES)
-  find_package(libqpOASES REQUIRED)
-  include_directories(${libqpOASES_INCLUDE_DIRS})
-  sofa_install_libraries(PATHS ${libqpOASES_LIBRARY})
-  target_link_libraries(${PROJECT_NAME} ${libqpOASES_LIBRARY})
-endif()
+find_package(qpOASES REQUIRED)
+
+include_directories(${qpOASES_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${qpOASES_LIBRARIES})
 
 target_link_libraries(${PROJECT_NAME}
     SoftRobots
